@@ -1,212 +1,188 @@
 <?php
-require_once "./inc/session.php";
-require_once "./php/main.php";
+require_once "./functions/main.php";
 
 $id = (isset($_GET['id'])) ? $_GET['id'] : 0;
 $id = clean_data($id);
 
 //Requerimos TODOS LOS DATOS para mostrarlos en el formulario
-$cities = connect();
-$cities = $cities->query("SELECT * FROM city");
-
-$type = connect();
-$type = $type->query("SELECT * FROM type");
-
-$property_data = connect();
-$property_data = $property_data->query("SELECT * FROM property WHERE property_id='$id' ");
-$data = $property_data->fetch();
-$property_data = null;
-
+$contributor_data = connect();
+$contributor_data = $contributor_data->query("SELECT * FROM contributors WHERE id='$id' ");
+$data = $contributor_data->fetch();
+$contributor_data = null;
+$rif_type = substr($data['rif_cedula'], 0, 1);
 ?>
 
 <div class="container-fluid">
     <?php include "./layouts/sidebar.php" ?>
     <div class="col px-0">
         <?php include "./layouts/navbar.php" ?>
-        <h3 class="mt-5 text-center">Modificar Propiedad</h3>
-
+        <?php
+        if (isset($data['direccion']) && $data['direccion'] != null && $data['direccion'] != " " && $data['calle'] == '') {
+            echo '<div class="alert alert-danger" role="alert">
+            Debe añadir los datos del contribuyente antes de continuar.<br>' . $data['direccion'] .
+                '</div>';
+        }
+        ?>
         <div class="form-rest">
-            <div class="text-center loader"><img src="./img/loader.gif" alt=""></div>
+            <div class="text-center loader"><img src="./assets/img/loader.gif" alt=""></div>
         </div>
 
-        <form action="./php/property_modify.php" class="FormularioAjax w-50 mx-auto mt-5" method="POST" autocomplete="off">
-            <div class="form-outline mb-4">
-                <label class="form-label"><strong>Titulo de la Propiedad</strong></label>
-                <input type="text" name="title" class="form-control" required value="<?php echo $data['property_title']; ?>" />
-            </div>
+        <h3 class="mt-5 text-center">Editar Contribuyente</h3>
 
-            <div class="form-outline mb-4">
-                <label class="form-label"><strong>Descripción</strong></label>
-                <textarea class="form-control" name="description" rows="8"><?php echo $data['property_description']; ?></textarea>
-            </div>
+        <form action="./controllers/contributors_update.php" class="FormularioAjax w-75 mx-auto mt-5" method="POST" autocomplete="off">
 
-            <!--Parte 2-->
+            <input type="hidden" name="contributor_id" value="<?php echo $id ?>">
+
+            <h5 class="mb-4">Información Personal</h5>
             <div class="row mb-4">
-                <div class="col">
-                    <label class="form-label"><strong>Tipo de propiedad</strong></label>
-                    <select class="form-select" name="type">
-                        <?php while ($row = $type->fetch()) : ?>
-                            <option value="<?php echo $row['type_name']; ?>" <?php if (($row['type_name'] == $data['property_type'])) {
-                                                                                    echo 'selected = "selected"';
-                                                                                } ?>>
-                                <?php echo $row['type_name'] ?> </option>
-                        <?php endwhile ?>
-                    </select>
+                <div class="col-8">
+                    <div class="form-outline">
+                        <label class="form-label"><strong>Razón Social</strong></label>
+                        <input type="text" class="form-control" required value="<?php echo str_replace('"', '', $data['razon_social'])  ?>" name="razon_social" />
+                    </div>
                 </div>
-                <div class="col">
-                    <label class="form-label"><strong>Estado de la propiedad</strong></label>
-                    <select class="form-select" name="transaction_type">
-                        <option value="Alquiler" <?php if (("Alquiler" == $data['property_transaction_type'])) {
-                                                        echo 'selected = "selected"';
-                                                    } ?>>Alquiler</option>
-                        <option value="Compra" <?php if (("Compra" == $data['property_transaction_type'])) {
-                                                    echo 'selected = "selected"';
-                                                } ?>>Compra</option>
-                    </select>
-                </div>
-
                 <div class="col">
                     <div class="form-outline">
-                        <label class="form-label"><strong>Ubicación</strong></label>
-                        <input type="text" class="form-control" name="location" value="<?php echo $data['property_location']; ?>" />
-                    </div>
-                </div>
-            </div>
-
-            <!--Parte 3-->
-            <div class="row mb-4">
-                <div class="col">
-                    <label class="form-label" name><strong>Habitaciones</strong></label>
-                    <select class="form-select" name="rooms">
-                        <?php $i = 1;
-                        while ($i <= 10) : ?>
-                            <option value="<?php echo $i; ?>" <?php if (($i == $data['property_rooms'])) {
-                                                                    echo 'selected = "selected"';
-                                                                } ?>>
-                                <?php echo $i; ?> </option>
-                        <?php $i++;
-                        endwhile ?>
-                    </select>
-                </div>
-
-                <div class="col">
-                    <label class="form-label"><strong>Baños</strong></label>
-                    <select class="form-select" name="banios">
-                        <?php $i = 1;
-                        while ($i <= 5) : ?>
-                            <option value="<?php echo $i; ?>" <?php if (($i == $data['property_banios'])) {
-                                                                    echo 'selected = "selected"';
-                                                                } ?>>
-                                <?php echo $i; ?> </option>
-                        <?php $i++;
-                        endwhile ?>
-                    </select>
-                </div>
-
-                <div class="col">
-                    <div class="form-outline">
-                        <label class="form-label"><strong>Pisos</strong></label>
-                        <input type="text" name="floors" class="form-control" value="<?php echo $data['property_floors']; ?>" />
-                    </div>
-                </div>
-
-                <div class="col">
-                    <label class="form-label"><strong>Estacionamiento</strong></label>
-                    <select class="form-select" name="garage">
-                        <option value="Si" <?php if (("Si" == $data['property_garage'])) {
-                                                echo 'selected = "selected"';
-                                            } ?>>Si</option>
-                        <option value="No" <?php if (("No" == $data['property_garage'])) {
-                                                echo 'selected = "selected"';
-                                            } ?>>No</option>
-                    </select>
-                </div>
-            </div>
-
-            <!--Parte 4-->
-            <div class="row mb-4">
-                <div class="col">
-                    <div class="form-outline">
-                        <label class="form-label"><strong>Dimensiones</strong></label>
-                        <input type="text" name="size" class="form-control" value="<?php echo $data['property_size']; ?>" />
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="form-outline">
-                        <label class="form-label"><strong>Precio (Alquiler o Venta)</strong></label>
-                        <input type="text" name="price" class="form-control" value="<?php echo $data['property_price']; ?>" />
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="form-outline">
-                        <label class="form-label"><strong>Moneda ($ o Bsd)</strong></label>
-                        <input type="text" name="currency" class="form-control" value="<?php echo $data['property_currency']; ?>" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-4">
-                <div class="col">
-                    <label class="form-label"><strong>Foto Principal</strong></label>
-                    <input type="file" class="form-control" accept=".jpg, .png, .jpeg" name="main_photo">
-                </div>
-
-                <div class="col">
-                    <label class="form-label"><strong>Galeria de Fotos</strong></label>
-                    <input type="file" class="form-control" accept="image/*" name="gal_photos[]" multiple>
-                </div>
-            </div>
-
-            <!--Parte 5 - Propietario-->
-
-            <h3 class="text-center mb-3">Datos del propietario</h1>
-
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="form-outline">
-                            <label class="form-label"><strong>Nombre y Apellido</strong></label>
-                            <input type="text" name="owner" class="form-control" value="<?php echo $data['property_owner']; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="form-outline">
-                            <label class="form-label"><strong>Telefono</strong></label>
-                            <input type="text" name="owner_phone" class="form-control" value="<?php echo $data['property_owner_phone']; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col form-outline mt-2 ">
-                            <label class="form-label"><strong>Quien registra la propiedad?</strong></label>
-                            <input type="text" name="publicby" class="form-control" value="<?php echo $data['property_publicby']; ?>" />
-                        </div>
-                        <div class="col form-outline mt-2 ">
-                            <label class="form-label"><strong>Ciudad</strong></label>
-                            <select class="form-select" name="city">
-                                <?php while ($row = $cities->fetch()) : ?>
-                                    <option value="<?php echo $row['city_name'] ?>" <?php if (($row['city_name'] == $data['property_city'])) {
-                                                                                        echo 'selected = "selected"';
-                                                                                    } ?>>
-                                        <?php echo $row['city_name'] ?> </option>
-                                <?php endwhile ?>
+                        <label class="form-label"><strong>Rif/Cédula</strong></label>
+                        <div class="input-group">
+                            <select class="form-select" name="rif_tipo">
+                                <option value="<?php echo $rif_type ?>"><?php echo $rif_type . '-' ?></option>
+                                <option value="V">V-</option>
+                                <option value="J">J-</option>
+                                <option value="E">E-</option>
                             </select>
+                            <input type="number" class="form-control w-75" required value="<?php echo substr($data['rif_cedula'], 1) ?>" name="rif" />
                         </div>
                     </div>
                 </div>
-                <div><input type="hidden" name="id" value="<?php echo $id; ?>" /></div>
-                <div><input type="hidden" name="image" value="<?php echo $data['property_url_photo']; ?>" /></div>
+            </div>
 
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary btn-block mb-4 text-center ">Enviar</button>
+            <div class="row mb-4">
+
+                <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label"><strong>Correo</strong></label>
+                        <input type="text" class="form-control" required name="correo" value="<?php echo $data['email'] ?>" />
+                    </div>
                 </div>
+                <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label"><strong>Teléfono Móvil</strong></label>
+                        <input type="number" class="form-control" required value="<?php echo $data['telefono_celular'] ?>" name="telefono_movil" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label"><strong>Teléfono Fijo</strong></label>
+                        <input type="number" class="form-control" value="<?php echo $data['telefono_local'] ?>" name="telefono_local" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label"><strong>Licencia</strong></label>
+                        <input type="text" class="form-control" value="<?php echo $data['licencia'] ?>" name="licencia" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label"><strong>Registro</strong></label>
+                        <input type="text" class="form-control" value="<?php echo $data['registro'] ?>" name="registro" />
+                    </div>
+                </div>
+            </div>
+
+            <h5 class="mb-4">Dirección</h5>
+            <div class="row">
+                <div class="col">
+                    <label class="form-label" name><strong>Estado</strong></label>
+                    <input type="text" class="form-control" name="estado" value="Miranda" />
+                </div>
+                <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label"><strong>Ciudad</strong></label>
+                        <input type="text" class="form-control" name="ciudad" value="Cua" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-outline mb-4">
+                        <label class="form-label"><strong>Municipio</strong></label>
+                        <input type="text" class="form-control" name="municipio" value="Urdaneta" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-outline mb-4">
+                        <label class="form-label"><strong>Parroquia</strong></label>
+                        <select class="form-select" name="parroquia">
+                            <option value="Cua">Cua</option>
+                            <option value="Nva Cua">Nva Cua</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-outline mb-4">
+                        <label class="form-label"><strong>Ejes</strong></label>
+                        <select class="form-select" name="eje">
+                            <option value="Eje 1">Eje 1</option>
+                            <option value="Eje 2">Eje 2</option>
+                            <option value="Eje 3">Eje 3</option>
+                            <option value="Eje 4">Eje 4</option>
+                            <option value="Eje 5">Eje 5</option>
+                            <option value="Eje 6">Eje 6</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-outline mb-4">
+                        <label class="form-label"><strong>Sector</strong></label>
+                        <input type="text" class="form-control" required value="<?php echo $data['sector'] ?>" name="sector" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-outline mb-4">
+                        <label class="form-label"><strong>Comunidad</strong></label>
+                        <input type="text" class="form-control" value="<?php echo $data['comunidad'] ?>" name="comunidad" />
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label"><strong>Calle</strong></label>
+                        <input type="text" class="form-control" required value="<?php echo $data['calle'] ?>" name="calle" />
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-outline mb-4">
+                        <label class="form-label"><strong>Casa / Local</strong></label>
+                        <input type="text" class="form-control" value="<?php echo $data['casa'] ?>" required name="casa" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label"><strong>Punto de Referencia</strong></label>
+                        <input type="text" class="form-control" value="<?php echo $data['referencia'] ?>" name="referencia" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-block mb-4 text-center ">Enviar</button>
+            </div>
         </form>
 
     </div>
 
-    <?php
-    $type = null;
-    $cities = null
-    ?>
+</div>
+
+<?php
+$type = null;
+$cities = null
+?>

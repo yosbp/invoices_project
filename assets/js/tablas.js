@@ -1,30 +1,27 @@
-//Tabla para propiedades
-export function propertytable() {
+//Tabla para Contribuyentes
+export function contributorsTable() {
   return new gridjs.Grid({
     columns: [
       {
         name: "Id",
       },
       {
-        name: "Titulo",
+        name: "Razon Social",
       },
       {
-        name: "Tipo",
+        name: "Licencia",
       },
       {
-        name: "Estado",
+        name: "Registro",
       },
       {
-        name: "Ubicacion",
+        name: "Rif/Cedula",
       },
       {
-        name: "Precio",
+        name: "Celular",
       },
       {
-        name: "Ciudad",
-      },
-      {
-        name: "Publicado por",
+        name: "Local",
       },
       {
         name: "Editar",
@@ -38,15 +35,23 @@ export function propertytable() {
         name: "Eliminar",
         formatter: (_, row) =>
           gridjs.html(
-            `<a href="index.php?view=contributor_list&property_id_del=${row.cells[0].data}" onclick="return confirm('Confirmas borrar la propiedad?');"><i class="bi bi-trash"></i></a>`
+            `<a href=".?view=contributor_list&contributor_delete=${row.cells[0].data}" onclick="return confirm('Confirmas borrar el registro?');"><i class="bi bi-trash"></i></a>`
           ),
         sort: false,
       },
     ],
     server: {
-      url: "http://localhost/realstate/inc/datas.php?datas=property",
+      url: "http://localhost/invoices_project/data/datas.php?datas=contributors",
       then: (data) =>
-        data.map((card) => [card.property_id, card.property_title, card.property_type, card.property_transaction_type, card.property_location, card.property_price, card.property_city, card.property_publicby]),
+        data.map((card) => [
+          card.id,
+          card.razon_social,
+          card.licencia,
+          card.registro,
+          card.rif_cedula,
+          card.telefono_celular,
+          card.telefono_local,
+        ]),
     },
     sort: {
       enabled: true,
@@ -56,82 +61,167 @@ export function propertytable() {
     },
     pagination: {
       enabled: true,
-      limit: 15,
+      limit: 10,
       summary: true,
     },
-  }).render(document.getElementById("table_property"));
+  }).render(document.getElementById("table_contributors"));
 }
 
-//Tabla para Tipos de propiedades
-
-export function typetable() {
+//Tabla para Seleccionar Contribuyentes
+export function newInvoiceTable() {
   return new gridjs.Grid({
     columns: [
       {
-        name: "Identificador",
+        name: "Contribuyentes",
+      },
+      {
+        name: "Licencia",
+      },
+      {
+        name: "Registro",
+      },
+      {
+        name: "Seleccionar",
+        formatter: (_, row) =>
+          gridjs.html(
+            `<a href=".?view=invoice_new&id=${row.cells[3].data}"><i class="bi bi-check-circle-fill"></i></a>`
+          ),
+        sort: false,
+      },
+    ],
+    server: {
+      url: "http://localhost/invoices_project/data/datas.php?datas=contributors",
+      then: (data) =>
+        data.map((card) => [
+          card.razon_social,
+          card.licencia,
+          card.registro,
+          card.id,
+        ]),
+    },
+    style: { 
+      td: { 
+        'text-align': 'center'
+      }
+    },
+    sort: {
+      enabled: true,
+    },
+    search: {
+      enabled: true,
+    },
+    pagination: {
+      enabled: true,
+      limit: 10,
+      summary: false,
+    },
+  }).render(document.getElementById("table_new_invoice"));
+}
+
+//Tabla para Recibos
+export function invoiceTable() {
+  return new gridjs.Grid({
+    columns: [
+      {
+        name: "ID",
+      },
+      {
+        name: "Razon Social",
       },
       {
         name: "Tipo",
-        width: "100%",
       },
       {
-        name: "Eliminar",
+        name: "Item 1",
+      },
+      {
+        name: "Valor",
+      },
+      {
+        name: "Monto Total",
+      },
+      {
+        name: "Ver",
         formatter: (_, row) =>
           gridjs.html(
-            `<a href="index.php?view=type_list&type_id_del=${row.cells[0].data}" onclick="return confirm('Confirmas borrar el tipo?');"><i class="bi bi-trash"></i></a>`
+            `<a target="_blank" href="/invoices_project/invoices/invoice.php?id=${row.cells[0].data}"><i class="bi bi-eye"></i></a>`
           ),
         sort: false,
       },
     ],
     server: {
-      url: "http://localhost/realstate/inc/datas.php?datas=type",
-      then: (data) => data.map((card) => [card.type_id, card.type_name]),
+      url: "http://localhost/invoices_project/data/datas.php?datas=invoices",
+      then: (data) =>
+        data.map((card) => [
+          card.id, card.razon_social, card.tipo, card.item1, card.item1_valor, card.monto_total
+        ]),
+    },
+    style: { 
+      td: { 
+        'text-align': 'center'
+      }
+    },
+    sort: {
+      enabled: true,
     },
     search: {
       enabled: true,
     },
-    sort: true,
     pagination: {
       enabled: true,
       limit: 10,
       summary: true,
     },
-  }).render(document.getElementById("table_type"));
+  }).render(document.getElementById("table_invoices"));
 }
 
-//Tabla para Ciudades
-
-export function cityTable() {
+//Tabla para Seleccionar Contribuyentes
+export function newInvoiceServiceTable() {
   return new gridjs.Grid({
     columns: [
       {
-        name: "Identificador",
+        name: "Contribuyentes",
       },
       {
-        name: "Ciudad",
-        width: "100%",
+        name: "Licencia",
       },
       {
-        name: "Eliminar",
+        name: "Registro",
+      },
+      {
+        name: "Seleccionar",
         formatter: (_, row) =>
           gridjs.html(
-            `<a href="index.php?view=city_list&city_id_del=${row.cells[0].data}" onclick="return confirm('Confirmas borrar la Ciudad?');"><i class="bi bi-trash"></i></a>`
+            `<a href=".?view=invoice_service_new&id=${row.cells[3].data}"><i class="bi bi-check-circle-fill"></i></a>`
           ),
         sort: false,
       },
     ],
     server: {
-      url: "http://localhost/realstate/inc/datas.php?datas=city",
-      then: (data) => data.map((card) => [card.city_id, card.city_name]),
+      url: "http://localhost/invoices_project/data/datas.php?datas=contributors",
+      then: (data) =>
+        data.map((card) => [
+          card.razon_social,
+          card.licencia,
+          card.registro,
+          card.id,
+        ]),
+    },
+    style: { 
+      td: { 
+        'text-align': 'center'
+      }
+    },
+    sort: {
+      enabled: true,
     },
     search: {
       enabled: true,
     },
-    sort: true,
     pagination: {
       enabled: true,
       limit: 10,
-      summary: true,
+      summary: false,
     },
-  }).render(document.getElementById("table_city"));
+  }).render(document.getElementById("table"));
 }

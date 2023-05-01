@@ -1,0 +1,12 @@
+* {
+  font-family: "Lato", sans-serif;
+}
+
+.gridjs-th-content{
+  overflow: visible !important;
+  padding-right: 8px;
+}
+
+.loader {
+  display: none;
+}

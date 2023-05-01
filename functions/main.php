@@ -2,7 +2,7 @@
 
    //Conexion a base de datos   
    function connect(){
-        $pdo = new PDO('mysql:host=localhost;dbname=realstate', 'root','');
+        $pdo = new PDO('mysql:host=localhost;dbname=invoices', 'root','');
         return $pdo;
    }
 

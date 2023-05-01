@@ -11,13 +11,9 @@ $contributor_data = $contributor_data->query("SELECT * FROM contributors WHERE i
 $data = $contributor_data->fetch();
 $contributor_data = null;
 
-//Consultando la tabla de partidas en la BD
-$partidas = connect();
-$partidas = $partidas->query("SELECT * FROM partidas");
-
 //Determinando el siguiente ID para mostrarlo en Recibo
 $proximoId = connect();
-$proximoId = $proximoId->query("SELECT id FROM invoices ORDER BY id DESC LIMIT 1");
+$proximoId = $proximoId->query("SELECT id FROM invoices_service ORDER BY id DESC LIMIT 1");
 $proxID = $proximoId->fetchColumn() + 1;
 ?>
 
@@ -31,21 +27,21 @@ $proxID = $proximoId->fetchColumn() + 1;
         <?php
         if (isset($data['direccion']) && $data['direccion'] != null && $data['direccion'] != " " && $data['calle'] == '') {
             echo '<div id="alerta" class="alert alert-danger text-center" role="alert">
-            Debe añadir los datos del contribuyente antes de continuar.<br>' . $data['direccion'] . 
-            '<br>' . '<a class="alert-link" href="?view=contributor_edit&id='.$id .'">Ir a Modificar</a>' . 
-            '</div>';
+            Debe añadir los datos del contribuyente antes de continuar.<br>' . $data['direccion'] .
+                '<br>' . '<a class="alert-link" href="?view=contributor_edit&id=' . $id . '">Ir a Modificar</a>' .
+                '</div>';
         }
         ?>
 
-        <h3 class="mt-5 text-center">Crear Factura</h3>
+        <h3 class="mt-5 text-center">Crear Factura Aseo</h3>
 
-        <form action="./controllers/invoice_store.php" class="FormularioAjax w-75 mx-auto mt-5" method="POST" autocomplete="off">
+        <form action="./controllers/invoice_service_store.php" class="FormularioAjax w-75 mx-auto mt-5" method="POST" autocomplete="off">
 
             <input type="hidden" name="creado_por" value="<?php echo $_SESSION['username'] ?>">
             <input type="hidden" name="contribuyente_id" value="<?php echo $id ?>">
 
             <div class="row">
-                <h5 class=" col mb-4">Información Básica</h5>
+                <h5 class=" col-12 col-lg-4 mb-4">Información Básica</h5>
                 <div class="col ">
                     <div class="input-group mb-3 ms-auto" style="width: 180px;">
                         <span class="input-group-text" id="basic-addon3">Fecha</span>
@@ -55,46 +51,41 @@ $proxID = $proximoId->fetchColumn() + 1;
             </div>
 
             <div class="row mb-4">
-                <div class="col">
+                <div class="col-4 col-lg-2">
                     <div class="form-outline">
                         <label class="form-label"><strong>Nro. de Recibo</strong></label>
                         <input type="text" class="form-control" disabled name="recibo" value="<?php echo str_pad($proxID, 11, "0", STR_PAD_LEFT) ?>" />
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-4 col-lg-2">
                     <div class="form-outline">
                         <label class="form-label"><strong>Tipo</strong></label>
                         <div class="input-group">
                             <select class="form-select" name="tipo">
-                                <option value="Licencia">Licencia</option>
-                                <option value="Catastro">Catastro</option>
-                                <option value="Cementerio">Cementerio</option>
-                                <option value="c_catastral">Cédula Catastral</option>
-                                <option value="Licores">Licores</option>
-                                <option value="Otros">Otros</option>
+                                <option value="Aseo">Aseo</option>
                             </select>
                         </div>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-4 col-lg-2">
                     <div class="form-outline">
                         <label class="form-label"><strong>Licencia</strong></label>
                         <input type="text" class="form-control" disabled name="licencia" value="<?php echo $data['licencia'] ?>" />
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-4 col-lg-2">
                     <div class="form-outline">
                         <label class="form-label"><strong>Catastro</strong></label>
                         <input type="text" class="form-control" name="catastro" value="<?php echo $data['catastro'] ?>" />
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-4 col-lg-2">
                     <div class="form-outline">
                         <label class="form-label"><strong>Liq. Fiscal</strong></label>
                         <input type="text" class="form-control" name="liq_fiscal" value="<?php echo $data['liq_fiscal'] ?>" />
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-4 col-lg-2">
                     <div class="form-outline">
                         <label class="form-label"><strong>Placa</strong></label>
                         <input type="text" class="form-control" name="placa" value="<?php echo $data['placa'] ?>" />
@@ -103,19 +94,19 @@ $proxID = $proximoId->fetchColumn() + 1;
             </div>
 
             <div class="row mb-4">
-                <div class="col-2">
+                <div class="col-6 col-lg-2">
                     <div class="form-outline">
                         <label class="form-label"><strong>Rif/Cédula</strong></label>
                         <input type="text" class="form-control" disabled name="rif_cedula" value="<?php echo $data['rif_cedula'] ?>" />
                     </div>
                 </div>
-                <div class="col-2">
+                <div class="col-6 col-lg-2">
                     <div class="form-outline">
                         <label class="form-label"><strong>Nro de Registro</strong></label>
                         <input type="text" class="form-control" disabled name="registro" value="<?php echo $data['registro'] ?>" />
                     </div>
                 </div>
-                <div class="col-8">
+                <div class="col-12 col-lg-8">
                     <div class="form-outline">
                         <label class="form-label"><strong>Razón Social</strong></label>
                         <input type="text" class="form-control" disabled name="razon_social" value="<?php echo str_replace('"', '', $data['razon_social']) ?>" />
@@ -193,10 +184,7 @@ $proxID = $proximoId->fetchColumn() + 1;
                 <div class="form-outline">
                     <div class="input-group">
                         <select class="form-select w-75" name="item1">
-                            <?php while ($row = $partidas->fetch()) : ?>
-                                <option value="<?php echo $row['codigo'] . ' ' . $row['partida'] ?>">
-                                    <?php echo $row['codigo'] . ' ' . $row['partida'] ?> </option>
-                            <?php endwhile ?>
+                            <option value="3.01.03.54.00 Aseo Domiciliario">3.01.03.54.00 Aseo Domiciliario</option>
                         </select>
                         <input type="number" class="form-control" step="0.01" min="0" required name="item1_valor" />
                     </div>
@@ -225,18 +213,14 @@ $proxID = $proximoId->fetchColumn() + 1;
         nuevoContenedor.classList.add("form-outline");
         nuevoContenedor.innerHTML = `
             <div class="input-group">
-                <select class="form-select w-75" name="item${contador}">
-                    <?php $partidas->execute();
-                    while ($row = $partidas->fetch()) : ?>
-                        <option value="<?php echo $row['codigo'] . ' ' . $row['partida'] ?>">
-                            <?php echo $row['codigo'] . ' ' . $row['partida'] ?> </option>
-                    <?php endwhile ?>
+            <select class="form-select w-75" name="item1">
+                    <option value="3.01.03.54.00 Aseo Domiciliario">3.01.03.54.00 Aseo Domiciliario</option>
                 </select>
                 <input type="number" class="form-control" step="0.01" min="0" required name="item${contador}_valor" />
             </div>
         `;
 
-        if (contador == 6) {
+        if (contador == 3) {
             botonAgregar.disabled = true;
         }
 

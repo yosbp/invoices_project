@@ -1,5 +1,4 @@
 <?php
-require_once "./inc/session.php";
 require_once "./php/main.php";
 
 //Requerimos TODOS LOS DATOS para mostrarlos en el formulario

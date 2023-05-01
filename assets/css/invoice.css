@@ -1,0 +1,65 @@
+.header{
+    border: 3px solid #bababa;
+    border-radius: 12px;
+    width: auto;
+    font-weight: bold;
+    text-align: center; 
+}
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+ /* ajustar el tamaño de la imagen  */ /* margen a la derecha para separar la imagen del texto */
+.header img {
+  width: 150px; 
+  margin-right: 100px; 
+}
+
+/* ajustes texto heder */
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* ajuste texto general */
+.header {
+  font-family: Arial, sans-serif;
+}
+
+/* ajuste de la imagen del header */
+img {
+  display: block;
+  margin: auto 0;
+}
+
+table.roundcorner {
+  /* border-collapse: collapse;*/
+  border: 3px solid #bababa;
+  border-radius: 12px;
+  border-spacing: 0;
+  width: 100%;
+}
+
+table.roundcorner th,
+table.roundcorner td {
+  border-bottom: 1px solid #bababa;
+  padding: 8px px;
+}
+
+table.roundcorner th {
+  /* background-color:silver;
+     border-radius: 16px;*/
+}
+
+table.roundcorner tr:last-child > td {
+  border-bottom: none;
+}
+
+table th {
+  /*background-color:silver;*/
+}
+
+.colcenter td {
+  text-align: center;
+}
