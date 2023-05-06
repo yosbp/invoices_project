@@ -67,8 +67,8 @@ export function contributorsTable() {
   }).render(document.getElementById("table_contributors"));
 }
 
-//Tabla para Seleccionar Contribuyentes
-export function newInvoiceTable() {
+//Tabla para Seleccionar Contribuyentes Facturas Aseo Urbano
+export function newInvoiceServiceTable() {
   return new gridjs.Grid({
     columns: [
       {
@@ -115,11 +115,11 @@ export function newInvoiceTable() {
       limit: 10,
       summary: false,
     },
-  }).render(document.getElementById("table_new_invoice"));
+  }).render(document.getElementById("table"));
 }
 
-//Tabla para Recibos
-export function invoiceTable() {
+//Tabla para Facturas Aseo Urbano
+export function invoiceServiceTable() {
   return new gridjs.Grid({
     columns: [
       {
@@ -132,7 +132,7 @@ export function invoiceTable() {
         name: "Tipo",
       },
       {
-        name: "Item 1",
+        name: "Imputación",
       },
       {
         name: "Valor",
@@ -175,42 +175,40 @@ export function invoiceTable() {
   }).render(document.getElementById("table_invoices"));
 }
 
-//Tabla para Seleccionar Contribuyentes
-export function newInvoiceServiceTable() {
+//Tabla para Contribuyentes
+export function usersTable() {
   return new gridjs.Grid({
     columns: [
       {
-        name: "Contribuyentes",
+        name: "Id",
       },
       {
-        name: "Licencia",
+        name: "Nombre",
       },
       {
-        name: "Registro",
+        name: "Posicion",
       },
       {
-        name: "Seleccionar",
+        name: "Usuario",
+      },
+      {
+        name: "Eliminar",
         formatter: (_, row) =>
           gridjs.html(
-            `<a href=".?view=invoice_service_new&id=${row.cells[3].data}"><i class="bi bi-check-circle-fill"></i></a>`
+            `<a href=".?view=user_list&user_delete=${row.cells[0].data}" onclick="return confirm('Confirmas borrar el usuario?');"><i class="bi bi-trash"></i></a>`
           ),
         sort: false,
       },
     ],
     server: {
-      url: "http://localhost/invoices_project/data/datas.php?datas=contributors",
+      url: "http://localhost/invoices_project/data/datas.php?datas=users",
       then: (data) =>
         data.map((card) => [
-          card.razon_social,
-          card.licencia,
-          card.registro,
           card.id,
+          card.nombre + " " + card.apellido,
+          card.posicion,
+          card.usuario,
         ]),
-    },
-    style: { 
-      td: { 
-        'text-align': 'center'
-      }
     },
     sort: {
       enabled: true,
@@ -221,7 +219,7 @@ export function newInvoiceServiceTable() {
     pagination: {
       enabled: true,
       limit: 10,
-      summary: false,
+      summary: true,
     },
-  }).render(document.getElementById("table"));
+  }).render(document.getElementById("table_users"));
 }

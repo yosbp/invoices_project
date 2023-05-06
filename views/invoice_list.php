@@ -1,23 +1,11 @@
-<div class="container-fluid">
-    <?php include "./layouts/sidebar.php" ?>
-    <div class="col px-0">
-        <?php include "./layouts/navbar.php" ?>
-        <h3 class="text-center mt-5">Lista de Facturas</h3>
+<h1 class="app-page-title text-center">Lista de Facturas Aseo</h1>
 
-        <div class="mx-auto" style="width: 90%;">
-            <?php
+<div style="width: fit-content;" id="table_invoices"></div>
 
-            ?>
-            <div id="table_invoices"></div>
-        </div>
+<script type="module">
+    import {
+        invoiceServiceTable
+    } from "./assets/js/tablas.js";
 
-    </div>
-
-
-    <script type="module">
-        import {
-            invoiceTable
-        } from "./assets/js/tablas.js";
-
-        invoiceTable();
-    </script>
+    invoiceServiceTable();
+</script>

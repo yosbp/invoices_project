@@ -19,11 +19,19 @@ if ($check_contributor->rowCount() == 1) {
     if ($delete_contributor->rowCount() == 1) {
 
         echo
-        '<div class="alert bg-success bg-opacity-50 text-center">
-            <strong>CONTRIBUYENTE ELIMINADO!</strong><br>
-            El contribuyente se elimino exitosamente
+        '
+        <div id="alerta" class="app-card shadow-sm mb-4 text-success bg-success p-2 bg-opacity-10 fw-bold" role="alert">
+            <div class="inner">
+                <div class="app-card-body p-3 p-lg-4">
+                    <div class="row text-center">
+                        <div class="">
+                            CONTRIBUYENTE ELIMINADO!.<br>' . 'El Contribuyente se eliminó exitosamente' .
+                        '</div>
+                    </div>
+                </div>
             </div>
-            ';
+        </div>
+        ';
     } else {
         echo
         '<div class="alert bg-danger bg-opacity-50 text-center">
@@ -35,10 +43,19 @@ if ($check_contributor->rowCount() == 1) {
     $delete_contributor = null;
 } else {
     echo
-    '<div class="alert bg-danger bg-opacity-50 text-center">
-    <strong>¡Ocurrio un error inesperado!</strong><br>
-    No existe el cobtribuyente seleccionado
-    </div>';
+    '
+    <div id="alerta" class="app-card shadow-sm mb-4 text-danger bg-danger p-2 bg-opacity-10 fw-bold" role="alert">
+        <div class="inner">
+            <div class="app-card-body p-3 p-lg-4">
+                <div class="row text-center">
+                    <div class="">
+                    ¡Ocurrio un error inesperado!.<br>' . 'No existe el contribuyente seleccionado' .
+                    '</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    ';
 };
 
 $check_contributor = null;

@@ -12,10 +12,6 @@ foreach ($lineas as $linea) {
     $save_data = connect();
     if ($i != 0) {
 
-        if($i == 25){
-            break;
-        }
-
         $datos = explode(";", $linea);
         
         $razon_social          = !empty($datos[0])   ? (str_replace('"', '', $datos[0])) :  '';

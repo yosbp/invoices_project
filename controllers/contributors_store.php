@@ -53,17 +53,31 @@ $save_contributor->execute($marks);
 
 if (($save_contributor->rowCount() == 1)) {
     echo '
-        <div class="alert bg-success bg-opacity-50 text-center">
-        <strong>CONTRIBUYENTE REGISTRADO!</strong><br>
-        El contribuyente se registro exitosamente
+    <div id="alerta" class="app-card shadow-sm mb-4 text-success bg-success p-2 bg-opacity-10 fw-bold" role="alert">
+        <div class="inner">
+            <div class="app-card-body p-3 p-lg-4">
+                <div class="row text-center">
+                    <div>
+                        CONTRIBUYENTE REGISTRADO!.<br>' . 'El Contribuyente se registró exitosamente' .
+                    '</div>
+                </div>
+            </div>
         </div>
+    </div>
         ';
 } else {
-    echo '
-        <div class="alert bg-danger bg-opacity-50 text-center">
-        <strong>¡Ocurrio un error inesperado!</strong><br>
-        No se pudo el contribuyente, por favor intente nuevamente.
-        </div>
+        echo '
+            <div id="alerta" class="app-card shadow-sm mb-4 text-danger bg-danger p-2 bg-opacity-10 fw-bold" role="alert">
+                <div class="inner">
+                    <div class="app-card-body p-3 p-lg-4">
+                        <div class="row text-center">
+                            <div>
+                            ¡Ocurrio un error inesperado!.<br>' . 'No se pudo registrar el contribuyente, por favor intente nuevamente.' .
+                            '</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         ';
 }
 

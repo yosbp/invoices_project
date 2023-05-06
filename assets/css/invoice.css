@@ -1,36 +1,43 @@
-.header{
-    border: 3px solid #bababa;
-    border-radius: 12px;
-    width: auto;
-    font-weight: bold;
-    text-align: center; 
-}
-
 .header {
   display: flex;
   align-items: center;
+  border: 3px solid #bababa;
+  border-radius: 12px;
+  font-weight: bold;
+  text-align: center;
 }
 
- /* ajustar el tamaño de la imagen  */ /* margen a la derecha para separar la imagen del texto */
+/* ajustar el tamaño de la imagen  */ /* margen a la derecha para separar la imagen del texto */
 .header img {
-  width: 150px; 
-  margin-right: 100px; 
+  width: 150px;
+  justify-self: flex-start;
+}
+
+.header p {
+  width: 80%;
 }
 
 /* ajustes texto heder */
 body {
   font-family: Arial, sans-serif;
+  background-image: url("../assets/img/logo-fondo.png");
+  /*background-repeat: no-repeat;*/
+  background-size: 10% 10%;
+  margin-top: 80px;
+  margin-bottom: 50px;
+  margin-right: 170px;
+  margin-left: 170px;
 }
 
-/* ajuste texto general */
-.header {
-  font-family: Arial, sans-serif;
+.imagen-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -0%);
 }
 
-/* ajuste de la imagen del header */
-img {
-  display: block;
-  margin: auto 0;
+.divisor {
+  margin-bottom: 10px;
 }
 
 table.roundcorner {
@@ -47,19 +54,30 @@ table.roundcorner td {
   padding: 8px px;
 }
 
-table.roundcorner th {
-  /* background-color:silver;
-     border-radius: 16px;*/
-}
-
 table.roundcorner tr:last-child > td {
   border-bottom: none;
 }
 
-table th {
-  /*background-color:silver;*/
-}
-
 .colcenter td {
   text-align: center;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0.5cm;
+  }
+
+  body {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .imagen-btn {
+    display: none;
+  }
+
+  * {
+    font-size: 14px;
+  }
 }

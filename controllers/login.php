@@ -35,19 +35,19 @@ if (verify_data("[a-zA-Z0-9$@.-]{7,100}", $password)) {
 }
 
 $check_user = connect();
-$check_user = $check_user->query("SELECT * FROM users WHERE username='$username'");
+$check_user = $check_user->query("SELECT * FROM users WHERE usuario='$username'");
 
 if ($check_user->rowCount() == 1) {
     $check_user = $check_user->fetch();
 
-    if ($check_user['username'] == $username && $password == $check_user['password']) {
+    if ($check_user['usuario'] == $username && $password == $check_user['contrasena']) {
 
         session_set_cookie_params(1800);
         session_name('mi_sesion');
         session_start();
         $_SESSION['id'] = $check_user['id'];
-        $_SESSION['name'] = $check_user['first_name'];
-        $_SESSION['username'] = $check_user['username'];
+        $_SESSION['name'] = $check_user['nombre'];
+        $_SESSION['user'] = $check_user['usuario'];
 
         if (headers_sent()) {
             echo "<script>window.location.href='?view=dashboard'<script>";

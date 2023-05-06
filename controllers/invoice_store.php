@@ -8,23 +8,13 @@ $tipo = clean_data($_POST["tipo"]);
 $nota = clean_data($_POST["nota"]);
 $item1 = clean_data($_POST["item1"]);
 $item1_valor = clean_data($_POST["item1_valor"]);
-$item2 = isset($_POST["item2"]) && !empty($_POST["item2"]) ? clean_data($_POST["item2"]) : "";
-$item2_valor = isset($_POST["item2_valor"]) && !empty($_POST["item2_valor"]) ? clean_data($_POST["item2_valor"]) : 0;
-$item3 = isset($_POST["item3"]) && !empty($_POST["item3"]) ? clean_data($_POST["item3"]) : "";
-$item3_valor = isset($_POST["item3_valor"]) && !empty($_POST["item3_valor"]) ? clean_data($_POST["item3_valor"]) : 0;
-$item4 = isset($_POST["item4"]) && !empty($_POST["item4"]) ? clean_data($_POST["item4"]) : "";
-$item4_valor = isset($_POST["item4_valor"]) && !empty($_POST["item4_valor"]) ? clean_data($_POST["item4_valor"]) : 0;
-$item5 = isset($_POST["item5"]) && !empty($_POST["item5"]) ? clean_data($_POST["item5"]) : "";
-$item5_valor = isset($_POST["item5_valor"]) && !empty($_POST["item5_valor"]) ? clean_data($_POST["item5_valor"]) : 0;
-$item6 = isset($_POST["item6"]) && !empty($_POST["item6"]) ? clean_data($_POST["item6"]) : "";
-$item6_valor = isset($_POST["item6_valor"]) && !empty($_POST["item6_valor"]) ? clean_data($_POST["item6_valor"]) : 0;
-$monto_total = $item1_valor + $item2_valor + $item3_valor + $item4_valor + $item5_valor + $item6_valor;
+$iva = ($item1_valor) * 0.16;
+$monto_total = $item1_valor + $iva;
 
 //Guardando datos en la BD
 
 $save_invoice = connect();
-$save_invoice = $save_invoice->prepare("INSERT INTO invoices (contribuyente_id, creado_por, tipo, nota, item1, item1_valor, item2, item2_valor, item3, item3_valor, item4, item4_valor, item5, item5_valor, item6, item6_valor, monto_total)
-VALUES (:contribuyente_id, :creado_por, :tipo, :nota, :item1, :item1_valor, :item2, :item2_valor, :item3, :item3_valor, :item4, :item4_valor, :item5, :item5_valor, :item6, :item6_valor, :monto_total)");
+$save_invoice = $save_invoice->prepare("INSERT INTO invoices (contribuyente_id, creado_por, tipo, nota, item1, item1_valor, iva, monto_total) VALUES (:contribuyente_id, :creado_por, :tipo, :nota, :item1, :item1_valor, :iva, :monto_total)");
 
 
 $marks = [
@@ -34,16 +24,7 @@ $marks = [
     ":nota" => $nota,
     ":item1" => $item1,
     ":item1_valor" => $item1_valor,
-    ":item2" => $item2,
-    ":item2_valor" => $item2_valor,
-    ":item3" => $item3,
-    ":item3_valor" => $item3_valor,
-    ":item4" => $item4,
-    ":item4_valor" => $item4_valor,
-    ":item5" => $item5,
-    ":item5_valor" => $item5_valor,
-    ":item6" => $item6,
-    ":item6_valor" => $item6_valor,
+    ":iva" => $iva,
     ":monto_total" => $monto_total
 ];
 
@@ -52,18 +33,34 @@ $save_invoice->execute($marks);
 
 if (($save_invoice->rowCount() == 1)) {
     echo '
-        <div class="alert bg-success bg-opacity-50 text-center">
-        <strong>FACTURA REGISTRADA!</strong><br>
-        La Factura se registró exitosamente
+    <div id="alerta" class="app-card shadow-sm mb-4 text-success bg-success p-2 bg-opacity-10 fw-bold" role="alert">
+        <div class="inner">
+            <div class="app-card-body p-3 p-lg-4">
+                <div class="row text-center">
+                    <div>
+                        FACTURA REGISTRADA!.<br>' . 'La Factura se registró exitosamente' .
+                    '</div>
+                </div>
+            </div>
         </div>
+    </div>
         ';
 } else {
     echo '
-        <div class="alert bg-danger bg-opacity-50 text-center">
-        <strong>¡Ocurrio un error inesperado!</strong><br>
-        No se pudo la Factura, por favor intente nuevamente.
+    <div id="alerta" class="app-card shadow-sm mb-4 text-danger bg-danger p-2 bg-opacity-10 fw-bold" role="alert">
+        <div class="inner">
+            <div class="app-card-body p-3 p-lg-4">
+                <div class="row text-center">
+                    <div>
+                    ¡Ocurrio un error inesperado!.<br>' . 'No se pudo registrar la factura, por favor intente nuevamente.' .
+                    '</div>
+                </div>
+            </div>
         </div>
-        ';
+    </div>
+';
+
+        
 }
 
 if (isset($_POST['catastro'])) {
@@ -80,37 +77,5 @@ if (isset($_POST['catastro'])) {
     $save_contributor->execute($marks);
     $save_contributor = null;
 }
-
-if (isset($_POST['liq_fiscal'])) {
-    $liq_fiscal = clean_data($_POST['liq_fiscal']);
-
-    $save_contributor = connect();
-
-    $save_contributor = $save_contributor->prepare("UPDATE contributors SET liq_fiscal=:liq_fiscal WHERE id=$contribuyente_id");
-
-    $marks = [
-        ":liq_fiscal" => $liq_fiscal,
-    ];
-
-    $save_contributor->execute($marks);
-    $save_contributor = null;
-}
-
-if (isset($_POST['placa'])) {
-    $placa = clean_data($_POST['placa']);
-
-    $save_contributor = connect();
-
-    $save_contributor = $save_contributor->prepare("UPDATE contributors SET placa=:placa WHERE id=$contribuyente_id");
-
-    $marks = [
-        ":placa" => $placa,
-    ];
-
-    $save_contributor->execute($marks);
-    $save_contributor = null;
-}
-
-
 
 $save_invoice = null;

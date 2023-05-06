@@ -8,10 +8,8 @@
                         <form method="POST" autocomplete="off">
                             <div class="d-flex align-items-center mb-3 pb-1">
                                 <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
-                                <span class="h1 fw-bold mb-0 text-center"><img src="assets\img\logo-alcaldia.png" class="w-50 "></span>
+                                <span class="h1 fw-bold mb-0 text-center"><img src="assets\img\logo-aseo.webp" class="w-75 "></span>
                             </div>
-
-                            <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Inicia Sesión</h5>
 
                             <div class="form-outline mb-4">
                                 <input class="form-control form-control-lg" type="text" name="login_user" pattern="[a-zA-Z0-9]{4,20}" maxlength="20" required>
@@ -23,8 +21,8 @@
                                 <label class="form-label" for="form2Example27">Contraseña</label>
                             </div>
 
-                            <div class="pt-1 mb-4">
-                                <button class="btn btn-dark btn-lg btn-block" type="submit">Entrar</button>
+                            <div class="pt-1 mb-4 text-center">
+                                <button class="btn btn-success btn-lg btn-block w-100" type="submit">Iniciar Sesión</button>
                             </div>
 
                             <?php
