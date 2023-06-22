@@ -17,7 +17,7 @@
                             </div>
 
                             <div class="form-outline mb-4">
-                                <input class="form-control form-control-lg" type="password" name="login_password" pattern="[a-zA-Z0-9$@.-]{7,100}" maxlength="100" required>
+                                <input class="form-control form-control-lg" type="password" name="login_password" pattern="[a-zA-Z0-9$@.-*]{7,100}" maxlength="100" required>
                                 <label class="form-label" for="form2Example27">Contraseña</label>
                             </div>
 

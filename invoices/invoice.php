@@ -30,54 +30,55 @@ $data = null;
 <body>
     <!-- encabezado -->
     <div class="header divisor">
-        <img src="../assets/img/logo-aseo-factura.webp" alt="Logo">
+        <img src="../assets/img/logo-aseo.webp" alt="Logo">
         <p>INVERSIONES BICENTENARIO 2017, C.A.
             <br> DIRECCIÓN: EDIFICIO INDUSTRIAL, PISO 1, SECTOR APARAY, OFICINA N°1
             <br> CÚA, ESTADO MIRANDA J-404073426
-            <br>Telefono: 0414-xxx-xxxx
             <br>Correo: aseourdaneta@gmail.com
             <br>Página Web: www.aseourdaneta.com
         </p>
+        <div class="factura">
+            <span>Factura: <br></span>
+            <span style="font-weight: normal; color: red;"><?php echo str_pad($id, 11, "0", STR_PAD_LEFT) ?></span>
+        </div>
     </div>
 
     <!-- datos de factura -->
     <table class="roundcorner divisor">
         <thead>
             <tr>
-                <th style="text-align:center;">Num Factura</th>
-                <th style="border-left:1px solid black;">Licencia/Registro</th>
-                <th style="border-left:1px solid black;">RIF/C.I</th>
-                <th style="border-left:1px solid black;">Aseo</th>
-                <th style="border-left:1px solid black;">Fecha</th>
+                <th style="text-align:center; width: 20%;">Cod Cliente</th>
+                <th style="border-left:1px solid black; width: 20%;">Patente/Registro</th>
+                <th style="border-left:1px solid black; width: 20%;">RIF/C.I</th>
+                <th style="border-left:1px solid black; width: 20%;">Catastro</th>
+                <th style="border-left:1px solid black; width: 20%;">Fecha</th>
             </tr>
         </thead>
 
         <tbody>
             <tr>
-                <td style="text-align:center"><?php echo str_pad($id, 11, "0", STR_PAD_LEFT) ?></td>
-                <td style="text-align:center; border-left:1px solid black;"><?php if ($invoice['licencia'] != '') {
-                                                                                echo $invoice['licencia'];
-                                                                            } else {
-                                                                                echo $invoice['registro'];
-                                                                            } ?></td>
+                <td style="text-align:center"><?php echo str_pad($invoice['contribuyente_id'], 11, "0", STR_PAD_LEFT) ?></td>
+                <td style="text-align:center; border-left:1px solid black;"><?php echo $invoice['registro']; ?></td>
                 <td style="text-align:center; border-left:1px solid black;"><?php echo $invoice['rif_cedula'] ?></td>
-                <td style="text-align:center; border-left:1px solid black;">V24561232</td>
+                <td style="text-align:center; border-left:1px solid black;"><?php echo $invoice['catastro'] ?></td>
                 <td style="text-align:center; border-left:1px solid black;"><?php echo date("d-m-Y", strtotime($invoice['fecha'])) ?></td>
             </tr>
 
             <tr>
-                <th colspan="2" style="text-align:left; padding-top:10px">Razón social</th>
-                <th colspan="4" style="text-align:left; padding-top:10px; border-left:1px solid black;">Dirección</th>
+                <th colspan="3" style="text-align:left; padding-top:10px">Nombre o Razón social</th>
+                <th colspan="2" style="text-align:left; padding-top:10px; border-left:1px solid black;">Dirección del Inmueble</th>
             </tr>
             <tr>
-                <td colspan="2" style="text-align:left; padding-top:5px; padding-bottom:10px;"><?php echo $invoice['razon_social'] ?></td>
-                <td colspan="4" style="text-align:left; padding-top:5px; padding-bottom:10px; border-left:1px solid black;"><?php echo 'Edo. Miranda, Cúa, Sector ' . $invoice['sector'] . ' ' . $invoice['casa'] ?></td>
+                <td colspan="3" style="text-align:left; padding-top:5px; padding-bottom:10px;"><?php echo $invoice['razon_social'] ?></td>
+                <td colspan="2" style="text-align:left; padding-top:5px; padding-bottom:10px; border-left:1px solid black;"><?php echo 'Edo. Miranda, Cúa, Sector ' . $invoice['sector'] . ' ' . $invoice['casa'] ?></td>
             </tr>
             <tr>
-                <th colspan="7" style="text-align:left; padding-top:10px;">Nota</th>
+                <th colspan="3" style="text-align:left; padding-top:10px;">Observaciones</th>
+                <th colspan="2" style="text-align:left;border-left:1px solid black; padding-top:10px;">Mes a Pagar</th>
             </tr>
             <tr>
-                <td colspan="7" style="text-align:left; padding-top:5px; padding-bottom:10px;"><?php echo $invoice['nota'] ?></td>
+                <td colspan="3" style="text-align:left; padding-top:5px; padding-bottom:10px;"><?php echo isset($invoice['nota']) && !empty($invoice['nota']) ? $invoice['nota'] : '-'; ?></td>
+                <td colspan="2" style="text-align:left; border-left:1px solid black; padding-top:5px; padding-bottom:10px;"><?php echo $invoice['mes_pagado']; ?></td>
             </tr>
         </tbody>
     </table>
@@ -92,7 +93,7 @@ $data = null;
         <tr>
             <td style="width:1vw;text-align:center;">01</td>
             <td style="border-left:1px solid black;"><?php echo $invoice['item1'] ?></td>
-            <td style="text-align:center;border-left:1px solid black;"><?php echo $invoice['item1_valor'] ?></td>
+            <td style="text-align:center;border-left:1px solid black;"><?php echo number_format(floor($invoice['item1_valor']*100)/100, 2,'.', '') ?></td>
         </tr>
         <tr>
             <td style="width:1vw;text-align:center;"></td>
@@ -106,15 +107,15 @@ $data = null;
         </tr>
         <tr>
             <td colspan="2" style="text-align: end; font-weight: bold;">Base imponible</td>
-            <td style="text-align:center;border-left:1px solid black;"><?php echo $invoice['item1_valor'] ?></td>
+            <td style="text-align:center;border-left:1px solid black;"><?php echo number_format(floor($invoice['item1_valor']*100)/100, 2,'.', '')  ?></td>
         </tr>
         <tr>
             <td colspan="2" style="text-align: end; font-weight: bold;">IVA 16%</td>
-            <td style="text-align:center;border-left:1px solid black;"><?php echo $invoice['iva'] ?></td>
+            <td style="text-align:center;border-left:1px solid black;"><?php echo number_format(floor($invoice['iva']*100)/100, 2,'.', '') ?></td>
         </tr>
         <tr>
             <td colspan="2" style="text-align: end; font-weight: bold;">VALOR TOTAL</td>
-            <td style="text-align:center;border-left:1px solid black;"><?php echo $invoice['monto_total'] ?></td>
+            <td style="text-align:center;border-left:1px solid black;"><?php echo number_format(floor($invoice['monto_total']*100)/100, 2,'.', '') ?></td>
         </tr>
     </table>
 

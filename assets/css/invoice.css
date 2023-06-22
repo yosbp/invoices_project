@@ -6,21 +6,23 @@
   font-weight: bold;
   text-align: center;
 }
+.factura{
+  align-self: flex-end;
+  text-align: start;
+}
 
 /* ajustar el tamaño de la imagen  */ /* margen a la derecha para separar la imagen del texto */
 .header img {
-  width: 150px;
-  justify-self: flex-start;
+  width: 20%;
 }
 
 .header p {
-  width: 80%;
+  width: 65%;
 }
 
 /* ajustes texto heder */
 body {
   font-family: Arial, sans-serif;
-  background-image: url("../assets/img/logo-fondo.png");
   /*background-repeat: no-repeat;*/
   background-size: 10% 10%;
   margin-top: 80px;
@@ -51,11 +53,13 @@ table.roundcorner {
 table.roundcorner th,
 table.roundcorner td {
   border-bottom: 1px solid #bababa;
-  padding: 8px px;
 }
 
 table.roundcorner tr:last-child > td {
   border-bottom: none;
+}
+td, th{
+  padding-left: 5px;
 }
 
 .colcenter td {
@@ -64,7 +68,7 @@ table.roundcorner tr:last-child > td {
 
 @media print {
   @page {
-    size: A4 portrait;
+    size: Letter portrait;
     margin: 0.5cm;
   }
 
@@ -78,6 +82,11 @@ table.roundcorner tr:last-child > td {
   }
 
   * {
-    font-size: 14px;
+    font-size: 13px;
   }
+
+  .divisor {
+    margin-bottom: 7px;
+  }
+
 }

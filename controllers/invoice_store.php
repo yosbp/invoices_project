@@ -6,15 +6,16 @@ $contribuyente_id = intval($_POST["contribuyente_id"]);
 $creado_por = clean_data($_POST["creado_por"]);
 $tipo = clean_data($_POST["tipo"]);
 $nota = clean_data($_POST["nota"]);
+$mes_pagado = clean_data($_POST["mes_pagado"]);
 $item1 = clean_data($_POST["item1"]);
-$item1_valor = clean_data($_POST["item1_valor"]);
+$item1_valor = $_POST["item1_valor"];
 $iva = ($item1_valor) * 0.16;
 $monto_total = $item1_valor + $iva;
 
 //Guardando datos en la BD
 
 $save_invoice = connect();
-$save_invoice = $save_invoice->prepare("INSERT INTO invoices (contribuyente_id, creado_por, tipo, nota, item1, item1_valor, iva, monto_total) VALUES (:contribuyente_id, :creado_por, :tipo, :nota, :item1, :item1_valor, :iva, :monto_total)");
+$save_invoice = $save_invoice->prepare("INSERT INTO invoices (contribuyente_id, creado_por, tipo, nota, mes_pagado, item1, item1_valor, iva, monto_total) VALUES (:contribuyente_id, :creado_por, :tipo, :nota, :mes_pagado, :item1, :item1_valor, :iva, :monto_total)");
 
 
 $marks = [
@@ -22,6 +23,7 @@ $marks = [
     ":creado_por" => $creado_por,
     ":tipo" => $tipo,
     ":nota" => $nota,
+    ":mes_pagado" => $mes_pagado,
     ":item1" => $item1,
     ":item1_valor" => $item1_valor,
     ":iva" => $iva,

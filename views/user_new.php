@@ -49,7 +49,7 @@
     </div>
 
     <div class="text-center">
-        <button type="submit" id="enviar" class="btn btn-primary btn-block mb-4 text-center ">Enviar</button>
+        <button type="submit" id="enviar" class="btn btn-primary btn-block mb-4 text-center ">Guardar</button>
     </div>
 </form>
 

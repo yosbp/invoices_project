@@ -42,7 +42,7 @@ if (isset($data['direccion']) && $data['direccion'] != null && $data['direccion'
 
 <form action="./controllers/invoice_store.php" class="FormularioAjax mt-5" method="POST" autocomplete="off">
 
-    <input type="hidden" name="creado_por" value="<?php echo $_SESSION['username'] ?>">
+    <input type="hidden" name="creado_por" value="<?php echo $_SESSION['user'] ?>">
     <input type="hidden" name="contribuyente_id" value="<?php echo $id ?>">
 
     <div class="row">
@@ -160,10 +160,14 @@ if (isset($data['direccion']) && $data['direccion'] != null && $data['direccion'
             </div>
         </div>
     </div>
+    <div class="form-outline mb-4 col-4">
+        <label class="form-label"><strong>Mes a pagar</strong></label>
+        <input class="form-control" name="mes_pagado" required></input>
+    </div>
 
     <div class="form-outline mb-4">
-        <label class="form-label"><strong>Nota</strong></label>
-        <textarea class="form-control" name="nota" required rows="3"></textarea>
+        <label class="form-label"><strong>Observaciones</strong></label>
+        <textarea class="form-control" name="nota" rows="3"></textarea>
     </div>
 
     <h5 class="mb-4">Imputación Presupuestaria</h5>
@@ -174,14 +178,15 @@ if (isset($data['direccion']) && $data['direccion'] != null && $data['direccion'
                 <select class="form-select w-75" name="item1">
                     <option value="3.01.03.54.00 Aseo Domiciliario">3.01.03.54.00 Aseo Domiciliario</option>
                     <option value="3.01.03.54.00 Aseo Comercial">3.01.03.54.00 Aseo Comercial</option>
+                    <option value="3.01.03.54.00 Aseo Comercial">3.01.03.54.00 Aseo Industrial</option>
                 </select>
-                <input type="number" class="form-control" step="0.01" min="0" required name="item1_valor" />
+                <input type="number" class="form-control" step="0.0001" min="0" required name="item1_valor" />
             </div>
         </div>
     </div>
 
     <div class="text-center mt-4">
-        <button id="enviar" type="submit" class="btn btn-primary btn-block mb-4 text-center ">Enviar</button>
+        <button id="enviar" type="submit" class="btn btn-primary btn-block mb-4 text-center ">Crear Factura</button>
     </div>
 </form>
 
