@@ -93,7 +93,7 @@ $data = null;
         <tr>
             <td style="width:1vw;text-align:center;">01</td>
             <td style="border-left:1px solid black;"><?php echo $invoice['item1'] ?></td>
-            <td style="text-align:center;border-left:1px solid black;"><?php echo number_format(floor($invoice['item1_valor']*100)/100, 2,'.', '') ?></td>
+            <td style="text-align:center;border-left:1px solid black;"><?php echo number_format($invoice['item1_valor'], 2, ',', '.') ?></td>
         </tr>
         <tr>
             <td style="width:1vw;text-align:center;"></td>
@@ -107,15 +107,15 @@ $data = null;
         </tr>
         <tr>
             <td colspan="2" style="text-align: end; font-weight: bold;">Base imponible</td>
-            <td style="text-align:center;border-left:1px solid black;"><?php echo number_format(floor($invoice['item1_valor']*100)/100, 2,'.', '')  ?></td>
+            <td style="text-align:center;border-left:1px solid black;"><?php echo number_format($invoice['item1_valor'], 2, ',', '.') ?></td>
         </tr>
         <tr>
             <td colspan="2" style="text-align: end; font-weight: bold;">IVA 16%</td>
-            <td style="text-align:center;border-left:1px solid black;"><?php echo number_format(floor($invoice['iva']*100)/100, 2,'.', '') ?></td>
+            <td style="text-align:center;border-left:1px solid black;"><?php echo number_format($invoice['iva'], 2, ',', '.') ?></td>
         </tr>
         <tr>
             <td colspan="2" style="text-align: end; font-weight: bold;">VALOR TOTAL</td>
-            <td style="text-align:center;border-left:1px solid black;"><?php echo number_format(floor($invoice['monto_total']*100)/100, 2,'.', '') ?></td>
+            <td style="text-align:center;border-left:1px solid black;"><?php echo number_format($invoice['monto_total'], 2, ',', '.') ?></td>
         </tr>
     </table>
 

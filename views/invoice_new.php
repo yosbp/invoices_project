@@ -184,16 +184,33 @@ if (isset($data['direccion']) && $data['direccion'] != null && $data['direccion'
             </div>
         </div>
     </div>
-
     <div class="text-center mt-4">
+        <button type="button" onclick="calcularIVA()" class="btn btn-secondary btn-block mb-4 text-center me-3">Calcular IVA</button>
         <button id="enviar" type="submit" class="btn btn-primary btn-block mb-4 text-center ">Crear Factura</button>
     </div>
 </form>
 
-
+<!-- Modal para hacer el calculo-->
+<div class="modal fade" id="ivaModal" tabindex="-1" aria-labelledby="ivaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ivaModalLabel">Monto a Pagar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Imputación Presupuestaria:</strong> <span id="montoIngresado"></span></p>
+                <p><strong>Iva (16%)</strong> <span id="ivaValue"></span></p>
+                <p><strong>Monto Total a Pagar:</strong> <span id="montoTotal"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
-
     // Obtener el botón de enviar
     var botonEnviar = document.getElementById("enviar");
 
@@ -202,5 +219,16 @@ if (isset($data['direccion']) && $data['direccion'] != null && $data['direccion'
         // Si existe, añadir el atributo "disabled" al botón
         botonEnviar.disabled = true;
     }
-    
+
+    // Función para calcular el IVA
+    function calcularIVA() {
+        var monto = parseFloat(document.getElementsByName('item1_valor')[0].value);
+        var iva = monto * 0.16; // Calcula el IVA (16%)
+        var montoTotal = monto + iva; // Calcula el monto total
+        document.getElementById('montoIngresado').textContent = monto.toFixed(2); // Actualiza el contenido del elemento para mostrar el monto ingresado
+        document.getElementById('ivaValue').textContent = iva.toFixed(2); // Actualiza el contenido del elemento para mostrar el IVA
+        document.getElementById('montoTotal').textContent = montoTotal.toFixed(2); // Actualiza el contenido del elemento para mostrar el monto total
+        var modal = new bootstrap.Modal(document.getElementById('ivaModal')); // Crea una instancia del modal
+        modal.show(); // Abre el modal
+    }
 </script>
